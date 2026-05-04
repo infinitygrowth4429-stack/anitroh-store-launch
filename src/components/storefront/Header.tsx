@@ -1,7 +1,8 @@
 import { Link, NavLink } from "react-router-dom";
-import { Search, User, ShoppingBag, Heart, Menu } from "lucide-react";
+import { Search, User, ShoppingBag, Heart, Menu, Shield } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useState } from "react";
+import { useAdmin } from "@/hooks/useAdmin";
 
 const nav = [
   { to: "/category/men", label: "Men" },
@@ -13,6 +14,7 @@ const nav = [
 
 export default function Header() {
   const { count, setOpen } = useCart();
+  const { isAdmin } = useAdmin();
   const [mobile, setMobile] = useState(false);
 
   return (
@@ -47,6 +49,9 @@ export default function Header() {
 
         <div className="flex items-center gap-1 md:gap-3">
           <button className="p-2.5 hover:text-gold transition-colors" aria-label="Search"><Search className="w-[18px] h-[18px]" /></button>
+          {isAdmin && (
+            <Link to="/admin" className="p-2.5 hover:text-gold transition-colors hidden sm:inline-flex" aria-label="Admin" title="Admin"><Shield className="w-[18px] h-[18px]" /></Link>
+          )}
           <Link to="/account" className="p-2.5 hover:text-gold transition-colors hidden sm:inline-flex" aria-label="Account"><User className="w-[18px] h-[18px]" /></Link>
           <Link to="/wishlist" className="p-2.5 hover:text-gold transition-colors hidden sm:inline-flex" aria-label="Wishlist"><Heart className="w-[18px] h-[18px]" /></Link>
           <button onClick={() => setOpen(true)} className="p-2.5 hover:text-gold transition-colors relative" aria-label="Cart">

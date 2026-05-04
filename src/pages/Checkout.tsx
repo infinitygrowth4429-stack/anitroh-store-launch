@@ -29,6 +29,31 @@ export default function Checkout() {
     ship_city: "", ship_state: "", ship_postal_code: "", ship_country: "India",
   });
   const [payment, setPayment] = useState<"cod" | "upi" | "card">("cod");
+  const [couponCode, setCouponCode] = useState("");
+  const [coupon, setCoupon] = useState<any | null>(null);
+
+  const discount = (() => {
+    if (!coupon) return 0;
+    if (coupon.type === "percentage") {
+      const d = (total * Number(coupon.value)) / 100;
+      return coupon.max_discount ? Math.min(d, Number(coupon.max_discount)) : d;
+    }
+    if (coupon.type === "fixed") return Math.min(Number(coupon.value), total);
+    return 0;
+  })();
+  const grandTotal = Math.max(0, total - discount);
+
+  const applyCoupon = async () => {
+    const code = couponCode.toUpperCase().trim();
+    if (!code) return;
+    const { data, error } = await supabase.from("coupons").select("*").eq("code", code).eq("active", true).maybeSingle();
+    if (error || !data) return toast.error("Invalid coupon");
+    if (data.expires_at && new Date(data.expires_at) < new Date()) return toast.error("Coupon expired");
+    if (data.usage_limit && data.used_count >= data.usage_limit) return toast.error("Coupon limit reached");
+    if (Number(data.min_order_value) > total) return toast.error(`Min order $${data.min_order_value}`);
+    setCoupon(data);
+    toast.success(`Applied: ${data.code}`);
+  };
 
   useEffect(() => { document.title = "Checkout — ANITROH STORE"; }, []);
 
@@ -55,7 +80,8 @@ export default function Checkout() {
     }
     setBusy(true);
     const { data: order, error } = await supabase.from("orders").insert({
-      user_id: user.id, total, payment_method: payment, status: "pending", ...form,
+      user_id: user.id, total: grandTotal, payment_method: payment, status: "pending",
+      coupon_code: coupon?.code ?? null, discount_amount: discount, ...form,
     }).select().single();
     if (error || !order) { toast.error(error?.message ?? "Order failed"); setBusy(false); return; }
 
@@ -112,7 +138,7 @@ export default function Checkout() {
             </div>
 
             <button disabled={busy} className="w-full bg-primary text-primary-foreground py-4 text-[11px] tracking-[0.22em] uppercase hover:bg-gold hover:text-primary disabled:opacity-50 mt-6">
-              {busy ? "Placing order…" : `Place Order · $${total.toFixed(2)}`}
+              {busy ? "Placing order…" : `Place Order · $${grandTotal.toFixed(2)}`}
             </button>
           </form>
 
@@ -130,8 +156,21 @@ export default function Checkout() {
                 </div>
               ))}
             </div>
-            <div className="flex justify-between pt-4 border-t border-border mt-4 text-sm">
-              <span>Total</span><span className="font-medium">${total.toFixed(2)}</span>
+
+            <div className="mt-4 pt-4 border-t border-border space-y-2">
+              <label className="text-[10px] tracking-[0.22em] uppercase text-muted-foreground">Coupon code</label>
+              <div className="flex gap-2">
+                <input value={couponCode} onChange={(e) => setCouponCode(e.target.value.toUpperCase())} placeholder="ENTER CODE"
+                  className="flex-1 border border-border bg-transparent px-3 py-2 text-sm" />
+                <button type="button" onClick={applyCoupon} className="bg-primary text-primary-foreground px-4 text-[10px] tracking-[0.22em] uppercase">Apply</button>
+              </div>
+              {coupon && <div className="text-xs text-gold">✓ {coupon.code} applied</div>}
+            </div>
+
+            <div className="space-y-1.5 pt-4 mt-4 border-t border-border text-sm">
+              <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>${total.toFixed(2)}</span></div>
+              {discount > 0 && <div className="flex justify-between text-gold"><span>Discount</span><span>−${discount.toFixed(2)}</span></div>}
+              <div className="flex justify-between font-medium pt-1.5 border-t border-border mt-1.5"><span>Total</span><span>${grandTotal.toFixed(2)}</span></div>
             </div>
           </aside>
         </div>

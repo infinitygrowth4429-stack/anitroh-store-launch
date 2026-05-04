@@ -1,10 +1,14 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
 import { Minus, Plus, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function CartDrawer() {
   const { items, open, setOpen, remove, setQty, total } = useCart();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const checkout = () => { setOpen(false); navigate(user ? "/checkout" : "/auth"); };
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -59,7 +63,7 @@ export default function CartDrawer() {
                 <span className="font-medium">${total.toFixed(2)}</span>
               </div>
               <div className="text-xs text-muted-foreground">Shipping & taxes calculated at checkout.</div>
-              <button className="w-full bg-primary text-primary-foreground py-4 text-[11px] tracking-[0.22em] uppercase hover:bg-gold hover:text-primary transition-colors">
+              <button onClick={checkout} className="w-full bg-primary text-primary-foreground py-4 text-[11px] tracking-[0.22em] uppercase hover:bg-gold hover:text-primary transition-colors">
                 Checkout
               </button>
               <button onClick={() => setOpen(false)} className="w-full text-[11px] tracking-[0.22em] uppercase text-muted-foreground hover:text-foreground py-2">

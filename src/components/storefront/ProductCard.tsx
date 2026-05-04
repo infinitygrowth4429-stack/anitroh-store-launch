@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
-import { Star } from "lucide-react";
+import { Star, Heart } from "lucide-react";
 import { Product } from "@/data/products";
 import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
 
 export default function ProductCard({ product }: { product: Product }) {
   const { add } = useCart();
+  const { has, toggle } = useWishlist();
+  const saved = has(product.id);
   return (
     <article className="group">
       <Link to={`/product/${product.id}`} className="block relative overflow-hidden bg-secondary aspect-[4/5]">
@@ -21,6 +24,13 @@ export default function ProductCard({ product }: { product: Product }) {
             {product.badge}
           </span>
         )}
+        <button
+          onClick={(e) => { e.preventDefault(); toggle(product.id); }}
+          aria-label="Save to wishlist"
+          className="absolute top-4 right-4 w-9 h-9 rounded-full bg-background/95 backdrop-blur flex items-center justify-center hover:text-gold transition-colors"
+        >
+          <Heart className={`w-4 h-4 ${saved ? "fill-gold text-gold" : ""}`} />
+        </button>
         <button
           onClick={(e) => { e.preventDefault(); add(product); }}
           className="absolute inset-x-4 bottom-4 bg-primary text-primary-foreground py-3 text-[11px] tracking-[0.22em] uppercase opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 hover:bg-gold hover:text-primary"

@@ -14,6 +14,90 @@ export type Database = {
   }
   public: {
     Tables: {
+      coupons: {
+        Row: {
+          active: boolean
+          code: string
+          created_at: string
+          description: string | null
+          expires_at: string | null
+          id: string
+          max_discount: number | null
+          min_order_value: number
+          starts_at: string | null
+          type: Database["public"]["Enums"]["coupon_type"]
+          updated_at: string
+          usage_limit: number | null
+          used_count: number
+          value: number
+        }
+        Insert: {
+          active?: boolean
+          code: string
+          created_at?: string
+          description?: string | null
+          expires_at?: string | null
+          id?: string
+          max_discount?: number | null
+          min_order_value?: number
+          starts_at?: string | null
+          type: Database["public"]["Enums"]["coupon_type"]
+          updated_at?: string
+          usage_limit?: number | null
+          used_count?: number
+          value?: number
+        }
+        Update: {
+          active?: boolean
+          code?: string
+          created_at?: string
+          description?: string | null
+          expires_at?: string | null
+          id?: string
+          max_discount?: number | null
+          min_order_value?: number
+          starts_at?: string | null
+          type?: Database["public"]["Enums"]["coupon_type"]
+          updated_at?: string
+          usage_limit?: number | null
+          used_count?: number
+          value?: number
+        }
+        Relationships: []
+      }
+      inventory: {
+        Row: {
+          color: string | null
+          created_at: string
+          id: string
+          low_stock_threshold: number
+          product_id: string
+          size: string | null
+          stock: number
+          updated_at: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          id?: string
+          low_stock_threshold?: number
+          product_id: string
+          size?: string | null
+          stock?: number
+          updated_at?: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          id?: string
+          low_stock_threshold?: number
+          product_id?: string
+          size?: string | null
+          stock?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       order_items: {
         Row: {
           color: string | null
@@ -60,7 +144,11 @@ export type Database = {
       }
       orders: {
         Row: {
+          admin_notes: string | null
+          coupon_code: string | null
           created_at: string
+          delivered_at: string | null
+          discount_amount: number
           id: string
           payment_method: string
           ship_address_line1: string
@@ -71,12 +159,20 @@ export type Database = {
           ship_phone: string
           ship_postal_code: string
           ship_state: string
+          shipped_at: string | null
           status: string
           total: number
+          tracking_carrier: string | null
+          tracking_number: string | null
+          tracking_url: string | null
           user_id: string
         }
         Insert: {
+          admin_notes?: string | null
+          coupon_code?: string | null
           created_at?: string
+          delivered_at?: string | null
+          discount_amount?: number
           id?: string
           payment_method?: string
           ship_address_line1: string
@@ -87,12 +183,20 @@ export type Database = {
           ship_phone: string
           ship_postal_code: string
           ship_state: string
+          shipped_at?: string | null
           status?: string
           total: number
+          tracking_carrier?: string | null
+          tracking_number?: string | null
+          tracking_url?: string | null
           user_id: string
         }
         Update: {
+          admin_notes?: string | null
+          coupon_code?: string | null
           created_at?: string
+          delivered_at?: string | null
+          discount_amount?: number
           id?: string
           payment_method?: string
           ship_address_line1?: string
@@ -103,8 +207,12 @@ export type Database = {
           ship_phone?: string
           ship_postal_code?: string
           ship_state?: string
+          shipped_at?: string | null
           status?: string
           total?: number
+          tracking_carrier?: string | null
+          tracking_number?: string | null
+          tracking_url?: string | null
           user_id?: string
         }
         Relationships: []
@@ -154,6 +262,27 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       wishlists: {
         Row: {
           created_at: string
@@ -180,10 +309,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "customer"
+      coupon_type: "percentage" | "fixed" | "free_shipping" | "bogo"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -310,6 +446,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "customer"],
+      coupon_type: ["percentage", "fixed", "free_shipping", "bogo"],
+    },
   },
 } as const

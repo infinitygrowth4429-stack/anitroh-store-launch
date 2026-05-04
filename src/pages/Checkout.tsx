@@ -156,8 +156,21 @@ export default function Checkout() {
                 </div>
               ))}
             </div>
-            <div className="flex justify-between pt-4 border-t border-border mt-4 text-sm">
-              <span>Total</span><span className="font-medium">${total.toFixed(2)}</span>
+
+            <div className="mt-4 pt-4 border-t border-border space-y-2">
+              <label className="text-[10px] tracking-[0.22em] uppercase text-muted-foreground">Coupon code</label>
+              <div className="flex gap-2">
+                <input value={couponCode} onChange={(e) => setCouponCode(e.target.value.toUpperCase())} placeholder="ENTER CODE"
+                  className="flex-1 border border-border bg-transparent px-3 py-2 text-sm" />
+                <button type="button" onClick={applyCoupon} className="bg-primary text-primary-foreground px-4 text-[10px] tracking-[0.22em] uppercase">Apply</button>
+              </div>
+              {coupon && <div className="text-xs text-gold">✓ {coupon.code} applied</div>}
+            </div>
+
+            <div className="space-y-1.5 pt-4 mt-4 border-t border-border text-sm">
+              <div className="flex justify-between"><span className="text-muted-foreground">Subtotal</span><span>${total.toFixed(2)}</span></div>
+              {discount > 0 && <div className="flex justify-between text-gold"><span>Discount</span><span>−${discount.toFixed(2)}</span></div>}
+              <div className="flex justify-between font-medium pt-1.5 border-t border-border mt-1.5"><span>Total</span><span>${grandTotal.toFixed(2)}</span></div>
             </div>
           </aside>
         </div>

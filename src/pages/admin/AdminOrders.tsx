@@ -27,7 +27,7 @@ export default function AdminOrders() {
   };
 
   const update = async (id: string, patch: Record<string, any>) => {
-    const { error } = await supabase.from("orders").update(patch).eq("id", id);
+    const { error } = await (supabase.from("orders") as any).update(patch).eq("id", id);
     if (error) return toast.error(error.message);
     toast.success("Order updated");
     load();

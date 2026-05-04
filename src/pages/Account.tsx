@@ -120,6 +120,17 @@ export default function Account() {
                     <div className="text-xs text-muted-foreground mt-1">
                       {new Date(o.created_at).toLocaleDateString()} · {o.order_items?.length ?? 0} items
                     </div>
+                    {o.tracking_number && (
+                      <div className="mt-3 pt-3 border-t border-border text-xs">
+                        <div className="text-muted-foreground">Tracking · {o.tracking_carrier}</div>
+                        <div className="font-mono mt-0.5">{o.tracking_number}</div>
+                        {o.tracking_url && (
+                          <a href={o.tracking_url} target="_blank" rel="noopener noreferrer" className="inline-block mt-2 text-[10px] tracking-[0.22em] uppercase underline-grow">
+                            Track shipment →
+                          </a>
+                        )}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

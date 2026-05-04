@@ -29,6 +29,31 @@ export default function Checkout() {
     ship_city: "", ship_state: "", ship_postal_code: "", ship_country: "India",
   });
   const [payment, setPayment] = useState<"cod" | "upi" | "card">("cod");
+  const [couponCode, setCouponCode] = useState("");
+  const [coupon, setCoupon] = useState<any | null>(null);
+
+  const discount = (() => {
+    if (!coupon) return 0;
+    if (coupon.type === "percentage") {
+      const d = (total * Number(coupon.value)) / 100;
+      return coupon.max_discount ? Math.min(d, Number(coupon.max_discount)) : d;
+    }
+    if (coupon.type === "fixed") return Math.min(Number(coupon.value), total);
+    return 0;
+  })();
+  const grandTotal = Math.max(0, total - discount);
+
+  const applyCoupon = async () => {
+    const code = couponCode.toUpperCase().trim();
+    if (!code) return;
+    const { data, error } = await supabase.from("coupons").select("*").eq("code", code).eq("active", true).maybeSingle();
+    if (error || !data) return toast.error("Invalid coupon");
+    if (data.expires_at && new Date(data.expires_at) < new Date()) return toast.error("Coupon expired");
+    if (data.usage_limit && data.used_count >= data.usage_limit) return toast.error("Coupon limit reached");
+    if (Number(data.min_order_value) > total) return toast.error(`Min order $${data.min_order_value}`);
+    setCoupon(data);
+    toast.success(`Applied: ${data.code}`);
+  };
 
   useEffect(() => { document.title = "Checkout — ANITROH STORE"; }, []);
 
@@ -55,7 +80,8 @@ export default function Checkout() {
     }
     setBusy(true);
     const { data: order, error } = await supabase.from("orders").insert({
-      user_id: user.id, total, payment_method: payment, status: "pending", ...form,
+      user_id: user.id, total: grandTotal, payment_method: payment, status: "pending",
+      coupon_code: coupon?.code ?? null, discount_amount: discount, ...form,
     }).select().single();
     if (error || !order) { toast.error(error?.message ?? "Order failed"); setBusy(false); return; }
 

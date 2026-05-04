@@ -138,7 +138,7 @@ export default function Checkout() {
             </div>
 
             <button disabled={busy} className="w-full bg-primary text-primary-foreground py-4 text-[11px] tracking-[0.22em] uppercase hover:bg-gold hover:text-primary disabled:opacity-50 mt-6">
-              {busy ? "Placing order…" : `Place Order · $${total.toFixed(2)}`}
+              {busy ? "Placing order…" : `Place Order · $${grandTotal.toFixed(2)}`}
             </button>
           </form>
 

@@ -14,7 +14,167 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      order_items: {
+        Row: {
+          color: string | null
+          id: string
+          image: string | null
+          name: string
+          order_id: string
+          price: number
+          product_id: string
+          qty: number
+          size: string | null
+        }
+        Insert: {
+          color?: string | null
+          id?: string
+          image?: string | null
+          name: string
+          order_id: string
+          price: number
+          product_id: string
+          qty: number
+          size?: string | null
+        }
+        Update: {
+          color?: string | null
+          id?: string
+          image?: string | null
+          name?: string
+          order_id?: string
+          price?: number
+          product_id?: string
+          qty?: number
+          size?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          created_at: string
+          id: string
+          payment_method: string
+          ship_address_line1: string
+          ship_address_line2: string | null
+          ship_city: string
+          ship_country: string
+          ship_name: string
+          ship_phone: string
+          ship_postal_code: string
+          ship_state: string
+          status: string
+          total: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          payment_method?: string
+          ship_address_line1: string
+          ship_address_line2?: string | null
+          ship_city: string
+          ship_country?: string
+          ship_name: string
+          ship_phone: string
+          ship_postal_code: string
+          ship_state: string
+          status?: string
+          total: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          payment_method?: string
+          ship_address_line1?: string
+          ship_address_line2?: string | null
+          ship_city?: string
+          ship_country?: string
+          ship_name?: string
+          ship_phone?: string
+          ship_postal_code?: string
+          ship_state?: string
+          status?: string
+          total?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          address_line1: string | null
+          address_line2: string | null
+          avatar_url: string | null
+          city: string | null
+          country: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          phone: string | null
+          postal_code: string | null
+          state: string | null
+          updated_at: string
+        }
+        Insert: {
+          address_line1?: string | null
+          address_line2?: string | null
+          avatar_url?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          full_name?: string | null
+          id: string
+          phone?: string | null
+          postal_code?: string | null
+          state?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address_line1?: string | null
+          address_line2?: string | null
+          avatar_url?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          postal_code?: string | null
+          state?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      wishlists: {
+        Row: {
+          created_at: string
+          id: string
+          product_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          product_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          product_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

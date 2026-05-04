@@ -1,7 +1,8 @@
 import { Link, NavLink } from "react-router-dom";
-import { Search, User, ShoppingBag, Heart, Menu } from "lucide-react";
+import { Search, User, ShoppingBag, Heart, Menu, Shield } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useState } from "react";
+import { useAdmin } from "@/hooks/useAdmin";
 
 const nav = [
   { to: "/category/men", label: "Men" },

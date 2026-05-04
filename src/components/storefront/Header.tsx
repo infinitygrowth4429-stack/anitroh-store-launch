@@ -14,6 +14,7 @@ const nav = [
 
 export default function Header() {
   const { count, setOpen } = useCart();
+  const { isAdmin } = useAdmin();
   const [mobile, setMobile] = useState(false);
 
   return (

@@ -27,8 +27,8 @@ export default function Header() {
           <Menu className="w-5 h-5" />
         </button>
 
-        <Link to="/" className="font-serif text-2xl md:text-[28px] tracking-[0.18em] font-medium">
-          ANITROH<span className="gold-text">.</span>
+        <Link to="/" className="flex items-center" aria-label="Anitroh home">
+          <img src={anitrohLogo} alt="Anitroh" className="h-10 md:h-12 w-auto object-contain" />
         </Link>
 
         <nav className="hidden lg:flex items-center gap-9">

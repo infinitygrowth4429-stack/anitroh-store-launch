@@ -6,7 +6,7 @@ export default function Footer() {
     <footer className="bg-primary text-primary-foreground mt-24">
       <div className="container-edit py-20 grid md:grid-cols-4 gap-12">
         <div className="md:col-span-1">
-          <div className="font-serif text-2xl tracking-[0.18em] mb-5">ANITROH<span className="text-gold">.</span></div>
+          <img src={anitrohLogo} alt="Anitroh" className="h-12 w-auto object-contain mb-5 brightness-0 invert" />
           <p className="text-sm text-primary-foreground/65 leading-relaxed max-w-xs">
             A premium lifestyle house — clothing, footwear and considered wellness, crafted to outlast the season.
           </p>

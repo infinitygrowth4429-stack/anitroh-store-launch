@@ -44,6 +44,26 @@ export default function Account() {
       const { data: o } = await supabase.from("orders").select("*, order_items(*)").order("created_at", { ascending: false });
       setOrders(o ?? []);
     })();
+
+    const channel = supabase
+      .channel(`orders-user-${user.id}`)
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "orders", filter: `user_id=eq.${user.id}` },
+        (payload) => {
+          setOrders((prev) =>
+            prev.map((o) => (o.id === (payload.new as any).id ? { ...o, ...(payload.new as any) } : o))
+          );
+          const newStatus = (payload.new as any).status;
+          const oldStatus = (payload.old as any)?.status;
+          if (newStatus && newStatus !== oldStatus) {
+            toast.success(`Order #${(payload.new as any).id.slice(0, 8)} is now ${newStatus}`);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
   }, [user]);
 
   if (loading) return null;

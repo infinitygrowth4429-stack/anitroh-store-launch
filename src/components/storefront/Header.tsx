@@ -3,6 +3,7 @@ import { Search, User, ShoppingBag, Heart, Menu, Shield } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useState } from "react";
 import { useAdmin } from "@/hooks/useAdmin";
+import anitrohLogo from "@/assets/anitroh-logo.png";
 
 const nav = [
   { to: "/category/men", label: "Men" },

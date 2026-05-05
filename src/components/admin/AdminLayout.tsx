@@ -3,6 +3,7 @@ import { Navigate, NavLink, useLocation } from "react-router-dom";
 import { LayoutDashboard, Package, ShoppingBag, Tag, AlertTriangle, ArrowLeft } from "lucide-react";
 import { useAdmin } from "@/hooks/useAdmin";
 import { useAuth } from "@/context/AuthContext";
+import anitrohLogo from "@/assets/anitroh-logo.png";
 
 const nav = [
   { to: "/admin", label: "Overview", icon: LayoutDashboard, end: true },

@@ -1,5 +1,6 @@
 import { Instagram, Facebook, Youtube, Twitter } from "lucide-react";
 import { Link } from "react-router-dom";
+import anitrohLogo from "@/assets/anitroh-logo.png";
 
 export default function Footer() {
   return (

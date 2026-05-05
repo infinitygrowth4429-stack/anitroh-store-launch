@@ -21,15 +21,15 @@ export default function Footer() {
         </div>
 
         {[
-          { title: "House", links: ["About Us", "Sustainability", "Journal", "Press"] },
-          { title: "Care", links: ["Contact", "Shipping", "Returns", "Size Guide"] },
-          { title: "Legal", links: ["Privacy Policy", "Terms & Conditions", "Cookies", "Accessibility"] },
+          { title: "House", links: [{ label: "About Us", to: "#" }, { label: "Sustainability", to: "#" }, { label: "Journal", to: "#" }, { label: "Press", to: "#" }] },
+          { title: "Care", links: [{ label: "Contact", to: "/contact" }, { label: "Shipping", to: "#" }, { label: "Returns", to: "#" }, { label: "Size Guide", to: "#" }] },
+          { title: "Legal", links: [{ label: "Privacy Policy", to: "/privacy" }, { label: "Terms & Conditions", to: "#" }, { label: "Cookies", to: "#" }, { label: "Accessibility", to: "#" }] },
         ].map((col) => (
           <div key={col.title}>
             <div className="eyebrow text-primary-foreground/50 mb-5">{col.title}</div>
             <ul className="space-y-3">
               {col.links.map((l) => (
-                <li key={l}><Link to="#" className="text-sm text-primary-foreground/80 hover:text-gold transition-colors">{l}</Link></li>
+                <li key={l.label}><Link to={l.to} className="text-sm text-primary-foreground/80 hover:text-gold transition-colors">{l.label}</Link></li>
               ))}
             </ul>
           </div>

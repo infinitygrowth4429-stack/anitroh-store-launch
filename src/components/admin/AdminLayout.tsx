@@ -3,6 +3,7 @@ import { Navigate, NavLink, useLocation } from "react-router-dom";
 import { LayoutDashboard, Package, ShoppingBag, Tag, AlertTriangle, ArrowLeft } from "lucide-react";
 import { useAdmin } from "@/hooks/useAdmin";
 import { useAuth } from "@/context/AuthContext";
+import anitrohLogo from "@/assets/anitroh-logo.png";
 
 const nav = [
   { to: "/admin", label: "Overview", icon: LayoutDashboard, end: true },
@@ -37,8 +38,8 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     <div className="min-h-screen bg-background flex">
       <aside className="w-60 border-r border-border bg-card hidden md:flex flex-col">
         <div className="p-6 border-b border-border">
-          <div className="font-serif text-xl tracking-tight">ANITROH</div>
-          <div className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground mt-1">Admin</div>
+          <img src={anitrohLogo} alt="Anitroh" className="h-10 w-auto object-contain" />
+          <div className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground mt-2">Admin</div>
         </div>
         <nav className="flex-1 p-3 space-y-1">
           {nav.map((n) => {
